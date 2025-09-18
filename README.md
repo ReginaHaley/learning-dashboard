@@ -31,8 +31,41 @@ I built and ran this project entirely from the command line using **PowerShell**
 
 This was my first time keeping everything inside a terminal workflow and it helped me understand how developers typically work with projects step by step.
 
+## 🚀 How to View the Dashboard
 
-## How to run
-1. Build the database  
-   ```bash
-   python scripts/build_db.py
+
+1. Install Python (if not already installed)  
+   - Download from https://www.python.org/downloads/  
+   - On Windows, check “Add Python to PATH” during install  
+
+2. Download or clone this project  
+   - If you’re not using Git, click the green “Code → Download ZIP” button on GitHub, then unzip the folder  
+   - Or with Git:  
+    ``` git clone https://github.com/ReginaHaley/learning-dashboard.git  ```
+    ``` cd learning-dashboard  ```
+
+3. Create the database  
+   From the project folder (learning-dashboard), run:  
+     ```python scripts/build_db.py  ```
+   This will create ```data/dashboard.db  ```
+
+4. Export the data for the website  
+   Still in the project folder, run:  
+    ``` python scripts/export_json.py  ```
+   This will create ``` web/data.json  ```
+
+5. Start the local web server  
+   Change into the web folder and start Python’s built-in server:  
+   ```cd web  ```
+  ``` python -m http.server 8000  ```
+
+6. Open the dashboard in your browser  
+   Go to: http://localhost:8000  
+   You’ll see an interactive dashboard with three charts:  
+   - Weekly study minutes  
+   - Minutes by topic  
+   - Application stages  
+
+7. Stop the server when finished  
+   In the terminal window running the server, press Ctrl + C  
+
