@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Learning Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Learning Dashboard</h1>
+    <p>SQL + tiny Python + HTML/CSS/JS</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Weekly Study Minutes</h2>
+      <canvas id="weeklyChart"></canvas>
+    </section>
+
+    <section>
+      <h2>Minutes by Topic</h2>
+      <canvas id="topicChart"></canvas>
+    </section>
+
+    <section>
+      <h2>Application Stages</h2>
+      <canvas id="stageChart"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    Data source: <code>data/dashboard.db</code> → <code>web/data.json</code>
+  </footer>
+
+  <script>
+    // Keep references so we can safely re-create charts without the "canvas already in use" error
+    const charts = { weekly: null, topic: null, stage: null };
+
+    async function loadData() {
+      const res = await fetch('./data.json', { cache: "no-store" });
+      return res.json();
+    }
+
+    function destroyIfExists(canvas) {
+      const existing = Chart.getChart(canvas);
+      if (existing) existing.destroy();
+    }
+
+    function makeWeeklyChart(canvas, weekly) {
+      destroyIfExists(canvas);
+      const labels = weekly.map(r => r.week);
+      const data = weekly.map(r => r.total_minutes);
+      charts.weekly = new Chart(canvas, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Minutes', data }] },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Minutes' } } }
+        }
+      });
+    }
+
+    function makeTopicChart(canvas, byTopic) {
+      destroyIfExists(canvas);
+      const labels = byTopic.map(r => r.topic);
+      const data = byTopic.map(r => r.total_minutes);
+      charts.topic = new Chart(canvas, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Minutes', data }] },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true, title: { display: true, text: 'Minutes' } } }
+        }
+      });
+    }
+
+    function makeStageChart(canvas, stages) {
+      destroyIfExists(canvas);
+      const labels = stages.map(r => r.stage);
+      const data = stages.map(r => r.count);
+      charts.stage = new Chart(canvas, {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+
+    (async () => {
+      const data = await loadData();
+      // data keys must be: weekly, by_topic, stages (from export_json.py)
+      makeWeeklyChart(document.getElementById('weeklyChart'), data.weekly);
+      makeTopicChart(document.getElementById('topicChart'), data.by_topic);
+      makeStageChart(document.getElementById('stageChart'), data.stages);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "weekly": [
+    {
+      "week": null,
+      "total_minutes": 45
+    },
+    {
+      "week": "2025-35",
+      "total_minutes": 260
+    },
+    {
+      "week": "2025-36",
+      "total_minutes": 220
+    }
+  ],
+  "by_topic": [
+    {
+      "topic": "SQL",
+      "total_minutes": 225
+    },
+    {
+      "topic": "Python",
+      "total_minutes": 140
+    },
+    {
+      "topic": "HTML/CSS",
+      "total_minutes": 85
+    },
+    {
+      "topic": "JS",
+      "total_minutes": 75
+    }
+  ],
+  "stages": [
+    {
+      "stage": "Applied",
+      "count": 2
+    },
+    {
+      "stage": "Interview",
+      "count": 1
+    },
+    {
+      "stage": "Assessment",
+      "count": 1
+    }
+  ]
+}
